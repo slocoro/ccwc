@@ -17,6 +17,22 @@ void count_bytes(FILE *file_ptr, int *count) {
     }
 }
 
+void count_lines(FILE *file_ptr, int *count) {
+    // no need to release memory from this array as allocated in stack
+    // only with malloc function does memory get allocated on heap and needs to be
+    // released using `free`
+    char line[512];
+    while (fgets(line, sizeof(line), file_ptr)) {
+        (*count)++;
+    }
+}
+
+void count_words(FILE *file_ptr, int *count) {
+    char word[512];
+    while (fscanf(file_ptr, "%s", word) == 1) {
+        (*count)++;
+    }
+}
 int ends_with_txt(char *file_name) {
     // find first occurence of '.' and return pointer to this character
     file_name = strrchr(file_name, '.');
@@ -35,9 +51,10 @@ int main(int argc, char *argv[]) {
 
     // pointer is a reference to a particular position in the opened file
     FILE *file_ptr;
-    file_ptr = fopen(argv[1], "rb");
     if (first_arg_is_filename == -1) {
         file_ptr = fopen(argv[2], "rb");
+    } else {
+        file_ptr = fopen(argv[1], "rb");
     }
 
     // check if the file is opened successfully
@@ -51,6 +68,10 @@ int main(int argc, char *argv[]) {
 
     if (first_arg_is_filename == 0 || strcmp(argv[1], "-c") == 0) {
         count_bytes(file_ptr, &count);
+    } else if (strcmp(argv[1], "-l") == 0) {
+        count_lines(file_ptr, &count);
+    } else if (strcmp(argv[1], "-w") == 0) {
+        count_words(file_ptr, &count);
     } else if (strcmp(argv[0], "xxx") == 0) {
     }
 
