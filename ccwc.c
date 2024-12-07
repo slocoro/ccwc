@@ -29,10 +29,12 @@ void count_lines(FILE *file_ptr, int *count) {
 
 void count_words(FILE *file_ptr, int *count) {
     char word[512];
+    // reads next "sequence of characters" "%s"
     while (fscanf(file_ptr, "%s", word) == 1) {
         (*count)++;
     }
 }
+
 int ends_with_txt(char *file_name) {
     // find first occurence of '.' and return pointer to this character
     file_name = strrchr(file_name, '.');
@@ -40,22 +42,24 @@ int ends_with_txt(char *file_name) {
     if (file_name != NULL)
         // use pointer to '.' to get the rest of the string (i.e. .txt)
         return strcmp(file_name, ".txt");
-
     return -1;
 }
 
 int main(int argc, char *argv[]) {
-    printf("Hello world!\n");
+    // printf("Hello world!\n");
 
     int first_arg_is_filename = ends_with_txt(argv[1]);
+    char *file_name;
+
+    if (first_arg_is_filename == -1) {
+        file_name = argv[2];
+    } else {
+        file_name = argv[1];
+    }
 
     // pointer is a reference to a particular position in the opened file
     FILE *file_ptr;
-    if (first_arg_is_filename == -1) {
-        file_ptr = fopen(argv[2], "rb");
-    } else {
-        file_ptr = fopen(argv[1], "rb");
-    }
+    file_ptr = fopen(file_name, "rb");
 
     // check if the file is opened successfully
     if (file_ptr == NULL) {
@@ -72,9 +76,8 @@ int main(int argc, char *argv[]) {
         count_lines(file_ptr, &count);
     } else if (strcmp(argv[1], "-w") == 0) {
         count_words(file_ptr, &count);
-    } else if (strcmp(argv[0], "xxx") == 0) {
     }
 
-    printf("%d\n", count);
+    printf("%d %s\n", count, file_name);
     return 0;
 }
