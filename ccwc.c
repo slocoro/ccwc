@@ -96,8 +96,8 @@ int main(int argc, char *argv[]) {
     // printf("Hello world!\n");
 
     int first_arg_is_filename = ends_with_txt(argv[1]);
-    char *file_name;
 
+    char *file_name;
     if (first_arg_is_filename == -1) {
         file_name = argv[2];
     } else {
@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
     FILE *file_ptr;
     file_ptr = fopen(file_name, "rb");
     // handle case where input gets piped from another command
-    if (argc < 3) {
+    if ((argc == 2) && (file_name == NULL)) {
         file_ptr = stdin;
     }
 
