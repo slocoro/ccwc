@@ -93,14 +93,28 @@ int ends_with_txt(char *file_name) {
 }
 
 int main(int argc, char *argv[]) {
-    // printf("Hello world!\n");
+
+    if (argc > 3) {
+        printf("Too many arguments. Exiting...\n");
+        exit(1);
+    }
 
     int first_arg_is_filename = ends_with_txt(argv[1]);
 
+    if (argc == 3) {
+        int second_arg_is_filename = ends_with_txt(argv[2]);
+        if (first_arg_is_filename == -1 && second_arg_is_filename == -1) {
+            printf("Only choose one option. Exiting...\n");
+            exit(1);
+        }
+    }
+
     char *file_name;
-    if (first_arg_is_filename == -1) {
+    file_name = NULL;
+    if (first_arg_is_filename == -1 && argc == 3) {
         file_name = argv[2];
-    } else {
+    }
+    if (first_arg_is_filename == 0 && argc == 2) {
         file_name = argv[1];
     }
 
@@ -114,7 +128,7 @@ int main(int argc, char *argv[]) {
 
     // check if the file is opened successfully
     if (file_ptr == NULL) {
-        printf("The file is not opened. The program will now exit.");
+        printf("The file is not opened. Exiting...\n");
         exit(0);
     }
 
