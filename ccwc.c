@@ -92,6 +92,11 @@ int ends_with_txt(char *file_name) {
     return -1;
 }
 
+void reset_condition(FILE *file_ptr, int *count) {
+    rewind(file_ptr);
+    *count = 0; // Dereference the pointer to set the value to 0!
+}
+
 int main(int argc, char *argv[]) {
 
     if (argc > 3) {
@@ -129,26 +134,44 @@ int main(int argc, char *argv[]) {
     // check if the file is opened successfully
     if (file_ptr == NULL) {
         printf("The file is not opened. Exiting...\n");
-        exit(0);
+        exit(1);
     }
 
     int count;
     count = 0;
 
-    if (first_arg_is_filename == 0 || strcmp(argv[1], "-c") == 0) {
+    if (first_arg_is_filename == 0) {
         count_bytes(file_ptr, &count);
-    } else if (strcmp(argv[1], "-l") == 0) {
-        count_lines(file_ptr, &count);
-    } else if (strcmp(argv[1], "-w") == 0) {
-        count_words(file_ptr, &count);
-    } else if (strcmp(argv[1], "-m") == 0) {
-        count_characters(file_ptr, &count);
-    }
+        printf("%d\t", count);
 
-    if (file_name != NULL) {
-        printf("%d %s\n", count, file_name);
+        reset_condition(file_ptr, &count);
+
+        count_lines(file_ptr, &count);
+        printf("%d\t", count);
+
+        reset_condition(file_ptr, &count);
+
+        count_words(file_ptr, &count);
+        printf("%d\t", count);
+
+        printf("%s\n", file_name);
+
     } else {
-        printf("%d \n", count);
+        if (strcmp(argv[1], "-c") == 0) {
+            count_bytes(file_ptr, &count);
+        } else if (strcmp(argv[1], "-l") == 0) {
+            count_lines(file_ptr, &count);
+        } else if (strcmp(argv[1], "-w") == 0) {
+            count_words(file_ptr, &count);
+        } else if (strcmp(argv[1], "-m") == 0) {
+            count_characters(file_ptr, &count);
+        }
+
+        if (file_name != NULL) {
+            printf("%d %s\n", count, file_name);
+        } else {
+            printf("%d \n", count);
+        }
     }
 
     return 0;
