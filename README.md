@@ -38,10 +38,11 @@ All:
 ```
 
 ### Learnings
+- Switch case statements only work with ints (the case you're comparing can't be a string)
 - You can read from the standard input using the special variable `stdin`. It behaves (or maybe is) like a file pointer `FILE`
 - Counting bytes and counting characters is different, some characters are >1 byte long
 - When reading a file one byte at a time store the bytes in a "buffer" so they can be used (e.g. identify multibyte characters)
-- `char *argv[]` is "an array of character pointer" (not the actual "string", although there are no strings in C)
+- `char *argv[]` is "an array of character pointers" (not the actual "string", although there are no strings in C)
 - If you want to iterate over a file for a second time you first have to reset the pointer to the beginning of the file.
 - When passing a variable pointer to a function (e.g. int *count), you need to dereference it (i.e.
 if you want to change its value. Otherwise you are changing the value of the pointer (i.e. address)
